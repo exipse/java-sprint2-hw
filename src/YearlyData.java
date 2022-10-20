@@ -1,5 +1,5 @@
 public class YearlyData {
-    Integer month;
-    Integer amount;
-    Boolean isExpense;
+    int month;
+    int amount;
+    boolean isExpense;
 }

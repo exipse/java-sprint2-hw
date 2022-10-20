@@ -1,4 +1,5 @@
 import Utils.ReadUtil;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -13,12 +14,10 @@ public class MonthlyReport {
     ArrayList<MonthlyData> reportMarch = new ArrayList<MonthlyData>();
 
 
-
-    ArrayList<MonthlyData> readReport(String path){ // метод считывания месячного отчета
-
-       ArrayList<MonthlyData> valuesLines = new ArrayList<>();
+    ArrayList<MonthlyData> readReport(String path) { // метод считывания месячного отчета
+        ArrayList<MonthlyData> valuesLines = new ArrayList<>();
         String monthContents = util.readFileContentsOrNull(path); // считываем контент в переменную
-        if (monthContents !=null) {
+        if (monthContents != null) {
 
             String[] contentLines = monthContents.split("\n"); //делем контент на строки (получаем массив строк)
 
@@ -36,141 +35,127 @@ public class MonthlyReport {
         }
 
         return valuesLines;
-}
-
-
-void chekData(HashMap<Integer, ArrayList<MonthlyData>> data, ArrayList<YearlyData> yR) { //метод для сверки данных
-
-
-if(!((data.size() == 0) || yR.size()==0)){
-    reportJan = data.get(1);
-    reportFeb = data.get(2);
-    reportMarch = data.get(3);
-
-    System.out.println("Месячные отчеты: ");
-    System.out.println("Январь. Доход составляет: " + findRevenueInMonth(reportJan) +". Расход: " + findExpenseInMonth(reportJan));
-    System.out.println("Февраль. Доход составляет: " + findRevenueInMonth(reportFeb) +". Расход: " + findExpenseInMonth(reportFeb));
-    System.out.println("Март. Доход составляет: " + findRevenueInMonth(reportMarch) +". Расход: " + findExpenseInMonth(reportMarch));
-
-
-    yReport.separateYearlyReport(yR);
-    if((!(yReport.yearlyRevue.get(0)).amount.equals(findRevenueInMonth(reportJan)))){
-        System.out.println("Обнаружено несоответствие. Прибыль в отчете за месяцем "+yReport.yearlyRevue.get(0).month+
-                " составляет "+ findRevenueInMonth(reportJan) + ". Прибыль в годовом отчете " + yReport.yearlyRevue.get(0).amount);
-            }
-
-    if((!(yReport.yearlyRevue.get(1)).amount.equals(findRevenueInMonth(reportFeb)))){
-        System.out.println("Обнаружено несоответствие. Прибыль в отчете за месяцем "+yReport.yearlyRevue.get(1).month+
-                " составляет "+ findRevenueInMonth(reportFeb) + ". Прибыль в годовом отчете " + yReport.yearlyRevue.get(1).amount);
     }
-    if((!(yReport.yearlyRevue.get(2)).amount.equals(findRevenueInMonth(reportMarch)))){
-        System.out.println("Обнаружено несоответствие. Прибыль в отчете за месяцем "+yReport.yearlyRevue.get(2).month+
-                " составляет "+ findRevenueInMonth(reportMarch) + ". Прибыль в годовом отчете " + yReport.yearlyRevue.get(2).amount);
-    }
-    System.out.println("");
-    if((!(yReport.yearlyExpense.get(0)).amount.equals(findExpenseInMonth(reportJan)))){
-        System.out.println("Обнаружено несоответствие. Расход в отчете за месяцем "+yReport.yearlyExpense.get(0).month+
-                " составляет "+ findExpenseInMonth(reportJan) + ". Расход в годовом отчете " + yReport.yearlyExpense.get(0).amount);
-    }
-    if((!(yReport.yearlyExpense.get(1)).amount.equals(findExpenseInMonth(reportFeb)))){
-        System.out.println("Обнаружено несоответствие. Расход в отчете за месяцем "+yReport.yearlyExpense.get(1).month+
-                " составляет "+ findExpenseInMonth(reportFeb) + ". Расход в годовом отчете " + yReport.yearlyExpense.get(1).amount);
-    }
-    if((!(yReport.yearlyExpense.get(0)).amount.equals(findExpenseInMonth(reportMarch)))){
-        System.out.println("Обнаружено несоответствие. Расход в отчете за месяцем "+yReport.yearlyExpense.get(2).month+
-                " составляет "+ findExpenseInMonth(reportMarch) + ". Расход в годовом отчете " + yReport.yearlyExpense.get(2).amount);
-    }
-    System.out.println("");
-    System.out.println("Сверка завершена.");
 
-}
-else {
-    System.out.println("Данных для сверки не найдено. Нужно считать месячные и годовые отчеты");
-}
+   void printReport(ArrayList<MonthlyData> report, int month){
+       for (int j = 0; j < report.size(); j++) {
+           MonthlyData rep = report.get(j);
+           System.out.println();
+           System.out.println("Отчет за " + month + " Месяц. Объект " + (j + 1));
+           System.out.println(rep.itemName);
+           System.out.println(rep.isExpense);
+           System.out.println(rep.quantity);
+           System.out.println(rep.sumOfOne);
 
-}
-
-
-
-Integer findRevenueInMonth(ArrayList<MonthlyData> revenue){ //метод по нахождению прибыли
-        Integer sum = 0;
-   for(int i = 0; i < revenue.size(); i++){
-       MonthlyData value =  revenue.get(i);
-       if(value.isExpense == false) {
-           sum = sum + (value.quantity * value.sumOfOne);
        }
    }
-    return sum;
-}
 
 
-Integer findExpenseInMonth(ArrayList<MonthlyData> expense) {  //метод по нахождению затрат
-    Integer sum = 0;
-    for(int i = 0; i < expense.size(); i++){
-        MonthlyData value =  expense.get(i);
-        if(value.isExpense == true) {
-            sum = sum + (value.quantity * value.sumOfOne);
-        }
-    }
-    return sum;
-}
+    void chekData(HashMap<Integer, ArrayList<MonthlyData>> data, ArrayList<YearlyData> yR) { //метод для сверки данных
+        if (!((data.size() == 0) || yR.size() == 0)) {
+            System.out.println("Месячные отчеты: ");
+            for (int i = 1; i <= 3; i++) {
+                System.out.println(findMonth(i) + ". Доход составляет: " + findRevenueInMonth(data.get(i)) + ". Расход: " + findExpenseInMonth(data.get(i)));
+            }
 
-void getFullInformation(HashMap<Integer, ArrayList<MonthlyData>> montlyReporters){
+            yReport.separateYearlyReport(yR);
 
-        for(int i=1; i <= montlyReporters.size(); i++ ){
-            ArrayList<MonthlyData> objMonth =  montlyReporters.get(i);
-            Integer maxCount = 0;
-            String nameMax ="";
-            Integer worthForUnit = 0;
-
-            Integer count =0;
-
-            Integer maxExpence = 0;
-            String nameExp ="";
-            Integer worthForUnitExp = 0;
-
-            String nameMonth = "";
-            for(int j=0; j < objMonth.size(); j++) {
-                MonthlyData line = objMonth.get(j);
-                if (line.isExpense == false) {
-                    count = count + (line.quantity * line.sumOfOne);
-                    if (maxCount < count) {
-                        maxCount = count;
-                        nameMax = line.itemName;
-                        worthForUnit = line.sumOfOne;
-                    }
-                } else if (line.isExpense == true) {
-                    count = count + (line.quantity * line.sumOfOne);
-                    if (maxExpence < count) {
-                        maxExpence = count;
-                        nameExp = line.itemName;
-                        worthForUnitExp = line.sumOfOne;
-
-                    }
-                }
-                count = 0;
-
-                if (i == 1) {
-                    nameMonth = "Январь";
-                } else if (i == 2) {
-                    nameMonth = "Февраль";
-                } else if (i == 3) {
-                    nameMonth = "Март";
-                } else {
-                    nameMonth = nameMonth + i;
+            for (int j = 0; j < 3; j++) {
+                if ((!(yReport.yearlyRevue.get(j).amount == findRevenueInMonth(data.get(j + 1))))) {
+                    System.out.println("Обнаружено несоответствие. Прибыль в отчете за " + findMonth(yReport.yearlyRevue.get(j).month) +
+                            " составляет " + findRevenueInMonth(data.get(j + 1)) + ". Прибыль в годовом отчете " + yReport.yearlyRevue.get(j).amount);
                 }
             }
-            System.out.println("Отчет за "+ nameMonth);
-            System.out.println("Самый прибыльный товар - " + nameMax +". Его стоимость за единицу - " + worthForUnit);
-            System.out.println("Самая большая трата - " + nameExp + ". Его стоимость за единицу - " + worthForUnitExp);
             System.out.println("");
+            for (int j = 0; j < 3; j++) {
+                if ((!(yReport.yearlyExpense.get(j).amount == findExpenseInMonth(data.get(j + 1))))) {
+                    System.out.println("Обнаружено несоответствие. Прибыль в отчете за " + findMonth(yReport.yearlyExpense.get(j).month) +
+                            " составляет " + findExpenseInMonth(data.get(j + 1)) + ". Прибыль в годовом отчете " + yReport.yearlyExpense.get(j).amount);
+                }
+            }
+            System.out.println("");
+            System.out.println("Сверка завершена.");
+
+        } else {
+            System.out.println("Данных для сверки не найдено. Нужно считать месячные и годовые отчеты");
         }
-        
 
-       }
-        
+    }
 
 
+    int findRevenueInMonth(ArrayList<MonthlyData> revenue) { //метод по нахождению прибыли
+        Integer sum = 0;
+        for (int i = 0; i < revenue.size(); i++) {
+            MonthlyData value = revenue.get(i);
+            if (value.isExpense == false) {
+                sum = sum + (value.quantity * value.sumOfOne);
+            }
+        }
+        return sum;
+    }
+
+
+    int findExpenseInMonth(ArrayList<MonthlyData> expense) {  //метод по нахождению затрат
+        Integer sum = 0;
+        for (int i = 0; i < expense.size(); i++) {
+            MonthlyData value = expense.get(i);
+            if (value.isExpense == true) {
+                sum = sum + (value.quantity * value.sumOfOne);
+            }
+        }
+        return sum;
+    }
+
+
+    void getFullInformation(HashMap<Integer, ArrayList<MonthlyData>> montlyReporters) {
+        if (!(montlyReporters.size() == 0)) {
+            for (int i = 1; i <= montlyReporters.size(); i++) {
+                ArrayList<MonthlyData> objMonth = montlyReporters.get(i);
+                int maxCount = 0;
+                String nameMax = "";
+                int count = 0;
+                int maxExpence = 0;
+                String nameExp = "";
+                for (int j = 0; j < objMonth.size(); j++) {
+                    MonthlyData line = objMonth.get(j);
+                    if (line.isExpense == false) {
+
+                        count = count + (line.quantity * line.sumOfOne);
+                        if (maxCount < count) {
+                            maxCount = count;
+                            nameMax = line.itemName;
+                        }
+                    } else {
+                        count = count + (line.quantity * line.sumOfOne);
+                        if (maxExpence < count) {
+                            maxExpence = count;
+                            nameExp = line.itemName;
+                        }
+                    }
+                    count = 0;
+                }
+                System.out.println("Отчет за " + findMonth(i));
+                System.out.println("Самый прибыльный товар - " + nameMax + ". Итого получено прибыли - " + maxCount);
+                System.out.println("Самая большая трата - " + nameExp + ". Итого потрачено - " + maxExpence);
+                System.out.println("");
+            }
+        } else {
+            System.out.println("Данных для сверки не найдено. Нужно считать месячные и годовые отчеты");
+        }
+    }
+
+
+    String findMonth(int number) {
+        if (number == 1) {
+            return "Январь";
+        } else if (number == 2) {
+            return "Февраль";
+        } else if (number == 3) {
+            return "Март";
+        } else {
+            return "" + number;
+        }
+    }
 
 }
 
