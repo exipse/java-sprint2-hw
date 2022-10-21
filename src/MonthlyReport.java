@@ -9,10 +9,6 @@ public class MonthlyReport {
     HashMap<Integer, ArrayList<MonthlyData>> reporters = new HashMap<>();
     ReadUtil util = new ReadUtil();
     YearlyReport yReport = new YearlyReport();
-    ArrayList<MonthlyData> reportJan = new ArrayList<MonthlyData>();
-    ArrayList<MonthlyData> reportFeb = new ArrayList<MonthlyData>();
-    ArrayList<MonthlyData> reportMarch = new ArrayList<MonthlyData>();
-
 
     ArrayList<MonthlyData> readReport(String path) { // метод считывания месячного отчета
         ArrayList<MonthlyData> valuesLines = new ArrayList<>();
@@ -69,8 +65,8 @@ public class MonthlyReport {
             System.out.println("");
             for (int j = 0; j < 3; j++) {
                 if ((!(yReport.yearlyExpense.get(j).amount == findExpenseInMonth(data.get(j + 1))))) {
-                    System.out.println("Обнаружено несоответствие. Прибыль в отчете за " + findMonth(yReport.yearlyExpense.get(j).month) +
-                            " составляет " + findExpenseInMonth(data.get(j + 1)) + ". Прибыль в годовом отчете " + yReport.yearlyExpense.get(j).amount);
+                    System.out.println("Обнаружено несоответствие. Расход в отчете за " + findMonth(yReport.yearlyExpense.get(j).month) +
+                            " составляет " + findExpenseInMonth(data.get(j + 1)) + ". Расход в годовом отчете " + yReport.yearlyExpense.get(j).amount);
                 }
             }
             System.out.println("");
